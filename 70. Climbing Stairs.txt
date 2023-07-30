@@ -1,0 +1,50 @@
+objective function: F(i) is the number of distinct ways you can climb to the ith stair
+base case: F(1) = 1, F(2) = 2
+recurrence relation: F(n) = F(n-1) + F(n-2)
+order of computation: top and bottom
+location of answer: after calculating for all stairs
+
+-------------------------------------------------------------
+# recursive approach with memoization. Space: O(n), Time O(n)
+cache = {}
+
+def dfs(n):
+    if n in cache:
+        return cache[n]
+    if n == 1:
+        return 1
+    if n == 2:
+        return 2
+    distinctWays = dfs(n-1) + dfs(n-2)
+    cache[n] = distinctWays
+    return distinctWays
+
+return dfs(n)
+
+-------------------------------------------------------------
+# Bottom Up Tabulation. Space: O(n), Time O(n)
+    if n == 1:
+        return
+    
+    dp = [i for i in range(n)]
+    dp[0] = 1
+    dp[1] = 2
+
+    for step in range(2, n):
+        dp[step] = dp[step-1] + dp[step-2]
+    
+    return dp[-1]
+
+-------------------------------------------------------------
+# Optimized Bottom Up . Space: O(1), Time O(n)
+if n == 1:
+    return 1
+
+prevprev, prev = 1, 2
+
+for step in range(2, n):
+    temp = prev
+    prev = prev + prevprev
+    prevprev = temp
+        
+return prev
