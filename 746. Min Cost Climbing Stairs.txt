@@ -1,0 +1,51 @@
+"""
+- Define objective function: F(i) minimum cost of ith step on a staircase
+- identify base cases: step at index 0 or step at index 1
+- recurrence relation: F(n) = min(F(n-1), F(n-2)) + curr step
+- order of computation: lowest step to highest step
+- location of the answer: highest step
+"""
+
+-------------------------------------------------------------
+# recursive approach with memoization. Space: O(n), Time O(n)
+cache = {}
+
+def dfs(step):
+    if step in cache:
+        return cache[step
+    if step >= len(cost):
+        return 0
+    
+    minCost = cost[step] + min(dfs(step+1), dfs(step+2))
+    cache[step] = minCost
+    return minCos
+
+return min(dfs(0), dfs(1))
+
+-------------------------------------------------------------
+# Bottom Up Tabulation. Space: O(n), Time O(n)
+
+if len(cost) == 2:
+    return min(cost)
+
+dp = [i for i in range(len(cost))]
+dp[0] = cost[0]
+dp[1] = cost[1]
+
+for i in range(2, len(cost)):
+    dp[i] = cost[i] + min(dp[i-1], dp[i-2])
+
+return min(dp[-1], dp[-2])
+
+-------------------------------------------------------------
+# Optimized Bottom Up . Space: O(1), Time O(n)
+
+prevprev = cost[0]
+prev = cost[1]
+
+for i in range(2, len(cost)):
+    temp = prev
+    prev = cost[i] + min(prevprev, prev)
+    prevprev = temp
+
+return min(prev, prevprev)
