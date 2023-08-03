@@ -1,0 +1,63 @@
+"""
+- Define objective function: F(i) is the maximum amount of money you have robbed given i houses and visiting nonadjacent houses. 
+- identify base cases: when i = 0, F(0) = nums[0]. i = 1, F(1) = max(nums[0], nums[1]) 
+- recurrence relation: F(i) = max(F(i-1), nums[i] + F(i-2))
+- order of computation: start of the array to the end of the array
+- location of the answer: at the end of iterating through the array
+"""
+
+-------------------------------------------------------------
+# recursive approach with memoization. Space: O(n), Time O(n)
+
+if len(nums) == 1:
+    return nums[0]
+
+memo = {}
+
+def dfs(i, stop): # stop parameter so we can iterate over it twice
+    if i in memo:
+        return memo[i]
+    if i == stop:
+        return nums[stop]
+    if i == stop + 1:
+        return max(nums[stop], nums[stop + 1])
+
+maxMoney = max(dfs(i-1, stop), nums[i] + dfs(i-2, stop))
+memo[i] = maxMoney
+return maxMoney
+
+includeFirstHouse = dfs(len(nums) - 2, 0)
+memo = {}
+excludeFirstHouse = dfs(len(nums) - 1, 1)
+
+return max(includeFirstHouse, excludeFirstHouse)
+
+-------------------------------------------------------------
+# Optimized Bottom Up . Space: O(1), Time O(n)
+
+if len(nums) == 1:
+    return nums[0]
+if len(nums) == 2 or len(nums) == 3:
+    return max(nums)
+
+first = nums[0]
+second = max(nums[0], nums[1])
+
+for i in range(2, len(nums) - 1): # 2 - 4 not including 4
+    temp = second
+    second = max(second, nums[i] + first)
+    first = temp
+        
+includeFirstHouse = second
+        
+first = nums[1]
+second = max(nums[1], nums[2])
+
+for i in range(3, len(nums)):
+    temp = second
+    second = max(second, nums[i] + first)
+    first = temp
+
+excludeFirstHouse = second
+
+return max(includeFirstHouse, excludeFirstHouse)
