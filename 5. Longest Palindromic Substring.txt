@@ -1,3 +1,6 @@
+-------------------------------------------------------------
+# single for loop approach. Space: O(n), Time O(n^2)
+
 res = ""
 resLen = 0
 

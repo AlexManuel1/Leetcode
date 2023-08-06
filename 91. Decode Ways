@@ -1,0 +1,23 @@
+-------------------------------------------------------------
+# recursive approach with memoization. Space: O(n), Time O(n)
+
+memo = {}
+
+def dfs(i):
+    if i in memo:
+        return memo[i]
+
+    if i >= len(s):
+        return 1
+    numWaysDecode = 0
+    if s[i] != "0":
+        numWaysDecode += dfs(i+1)
+    else:
+        return numWaysDecode
+    if i < len(s) - 1 and int(s[i]+s[i+1]) >= 10 and int(s[i]+s[i+1]) <= 26:
+        numWaysDecode += dfs(i+2)
+    memo[i] = numWaysDecode
+    return numWaysDecode
+
+
+return dfs(0)
