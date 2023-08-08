@@ -1,0 +1,37 @@
+-------------------------------------------------------------
+# recursive approach with memoization. Space: O(a), Time O(a*n) where a is amount and n is number of coins
+
+memo = {}
+
+def dfs(amt):
+    if amt in memo:
+        return memo[amt]
+    if amt > amount:
+        return math.inf
+    if amt == amount:
+        return 0
+
+    numCoins = math.inf
+    for coin in coins:
+        numCoins = min(numCoins, dfs(coin + amt) + 1)
+
+    memo[amt] = numCoins
+    print("amt, numCoins: ", amt, numCoins)
+    return numCoins
+
+res = dfs(0)
+return -1 if res == math.inf else res
+
+-------------------------------------------------------------
+# Bottom Up Tabulation. Space: O(a), Time O(a*n) where a is amount and n is number of coins
+
+dp = [math.inf for i in range(amount + 1)]
+dp[0] = 0
+
+for i in range(amount + 1): # 3
+    for coin in coins:
+        if i - coin >= 0:
+            dp[i] = min(dp[i], dp[i-coin] + 1)
+
+if dp[-1] == math.inf: return -1
+return dp[-1]
