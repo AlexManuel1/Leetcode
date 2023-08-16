@@ -1,0 +1,30 @@
+-------------------------------------------------------------
+# dfs approach with . Space: O(n + m), Time O(n + m) where n is the number of nodes and m is the number of edges
+
+pMap = { i:[] for i in range(numCourses) }
+
+for course, prerequisite in prerequisites:
+    pMap.get(course, []).append(prerequisite)
+
+visited = set()
+
+def dfs(n):
+    if not pMap[n]:
+        return True
+    if n in visited:
+        return False
+            
+    visited.add(n)
+
+    canFinishBool = True
+    for neighbor in pMap[n]:
+        canFinishBool = canFinishBool and dfs(neighbor)
+    pMap[n] = []
+
+    return canFinishBool
+
+for n in range(numCourses):
+    if not dfs(n):
+        return False
+
+return True
