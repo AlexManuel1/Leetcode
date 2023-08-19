@@ -1,0 +1,25 @@
+-------------------------------------------------------------
+# double stack approach. Space: O(2*n), Time O(1) for all methods
+
+class MinStack:
+
+    def __init__(self):
+        self.stack = []
+        self.minValueArr = []
+
+    def push(self, val: int) -> None:
+        self.stack.append(val)
+        if not self.minValueArr:
+            self.minValueArr.append(val)
+        else:
+            self.minValueArr.append(min(self.minValueArr[-1], val))
+
+    def pop(self) -> None:
+        self.stack.pop(-1)
+        self.minValueArr.pop(-1)
+
+    def top(self) -> int:
+        return self.stack[-1]
+
+    def getMin(self) -> int:
+        return self.minValueArr[-1]
