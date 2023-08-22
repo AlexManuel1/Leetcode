@@ -1,0 +1,19 @@
+-------------------------------------------------------------
+# dynamic programming. Space: O(n^2), Time O(n^2) where n is = 1/2 number of people
+
+cache = {}
+
+def dfs(i, aCount, bCount):
+    if (i, aCount, bCount) in cache:
+        return cache[(i, aCount, bCount)]
+    if i == len(costs):
+        return 0
+    minCost = float('inf')
+    if aCount < len(costs) / 2:
+        minCost = min(dfs(i+1, aCount + 1, bCount) + costs[i][0], minCost)
+    if bCount < len(costs) / 2:
+        minCost = min(dfs(i+1, aCount, bCount + 1) + costs[i][1], minCost)
+    cache[(i, aCount, bCount)] = minCost
+    return minCost
+
+return dfs(0, 0, 0)
