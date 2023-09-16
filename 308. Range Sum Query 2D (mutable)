@@ -1,0 +1,64 @@
+-------------------------------------------------------------
+# Non dynamic programming approach. Space: O((m*n)^2), Time O((m*n)^2)
+
+class NumMatrix:
+    def __init__(self, matrix: List[List[int]]):
+        self.matrix = matrix
+        self.cache = {}
+
+    def update(self, row: int, col: int, val: int) -> None:
+        # each value in cache is the sum
+        oldValue = self.matrix[row][col]
+        self.matrix[row][col] = val
+        for region, total in self.cache.items():
+            row1, col1, row2, col2 = region
+            if row1 <= row and row2 >= row and col1 <= col and col2 >= col:
+                self.cache[region] += val - oldValue
+        print(self.cache)
+
+    def sumRegion(self, row1: int, col1: int, row2: int, col2: int) -> int:
+        region = (row1, col1, row2, col2)
+        if region in self.cache:
+            return self.cache[region]
+        total = 0
+        # calculate sum and store in cache
+        for i in range(row1,row2+1):
+            for j in range(col1, col2+1):
+                total += self.matrix[i][j]
+        
+        self.cache[region] = total
+        return total
+
+-------------------------------------------------------------
+# dynamic programming approach. Space: O(n*m), Time: O(n*m) 
+
+class NumMatrix:
+
+    def __init__(self, matrix: List[List[int]]):
+        self.matrix = matrix
+        self.sumMatrix = [[0 for i in range(len(matrix[0])+1)] for j in range(len(matrix)+1)]
+        self.ROWS = len(self.sumMatrix)
+        self.COLS = len(self.sumMatrix[0])
+
+        for i in range(1, self.ROWS):
+            for j in range(1, self.COLS):
+                maxVal = max(self.sumMatrix[i][j-1], self.sumMatrix[i-1][j])
+                minVal = min(self.sumMatrix[i][j-1], self.sumMatrix[i-1][j])
+                val = self.matrix[i-1][j-1]
+                self.sumMatrix[i][j] = maxVal + minVal - self.sumMatrix[i-1][j-1] + self.matrix[i-1][j-1]
+
+        self.cache = {}
+
+    def update(self, row: int, col: int, val: int) -> None:
+        difference = val - self.matrix[row][col] 
+        for i in range(row+1, self.ROWS):
+            for j in range(col+1, self.COLS):
+                self.sumMatrix[i][j] += difference
+        self.matrix[row][col] = val
+
+
+    def sumRegion(self, row1: int, col1: int, row2: int, col2: int) -> int:
+        maxVal = max(self.sumMatrix[row2+1][col1], self.sumMatrix[row1][col2+1])
+        minVal = min(self.sumMatrix[row2+1][col1], self.sumMatrix[row1][col2+1])
+        total = self.sumMatrix[row2+1][col2+1] - (maxVal + minVal - self.sumMatrix[row1][col1])
+        return total

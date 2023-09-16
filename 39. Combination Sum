@@ -1,0 +1,21 @@
+-------------------------------------------------------------
+# backtracking. Space: O(n*m), Time O(n^2 * m) where n = number of candidates and m = target
+
+
+result = []
+
+def dfs(i, val, arr):
+    if val == target:
+        result.append(arr.copy())
+        return
+    if val > target:
+        return
+
+    for j in range(i, len(candidates)):
+        arr.append(candidates[j])
+        dfs(j, val + candidates[j], arr)
+        arr.remove(candidates[j])
+
+dfs(0, 0, [])
+
+return result
